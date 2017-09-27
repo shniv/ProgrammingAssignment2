@@ -1,42 +1,57 @@
 ## Caches inverse of a matrix and provides operations to get and set matrix
 ## and get and set matrix inverse.
 
-## Returns vector of functions "get", "set", "setinverse" and "getinverse"
-## set - sets value of matrix
-## get - gets value of matrix
-## setinverse - sets matrix inverse
-## gets matrix inverseS
+## Caches matrix and returns list of functions 
+## to get and set matrix and its inverse
 makeCacheMatrix <- function(x = matrix()) {
-        #1. Create special matrix object with operation inverse
+        
         m <- NULL
+        
+        ## set matrix
         set <- function(y) {
                 x <<- y
                 m <<- NULL
         }
+        
+        ## get matrix
         get <- function() x
-        setinverse <- function(inverse) m <<- inverse
-        getinverse <- function() m
+        
+        ## set inverse of matrix
+        setInverse <- function(inverse) m <<- inverse
+        
+        ## get inverse of matrix
+        getInverse <- function() m
+        
+        ## return list of functions
         list(set = set, get = get,
-             setinverse = setinverse,
-             getinverse = getinverse)
+             setInverse = setInverse,
+             getInverse = getInverse)
 }
 
 ## Takes special function vector, obtains cached matrix.
-## If inverse is not NULL ( already calculated), inverse is returned.
+## If inverse is not NULL (already calculated), inverse is returned.
 ## Else, it solves for inverse.
 cacheSolve <- function(x, ...) {
-        m <- x$getinverse()
+        
+        ## Gets stored inverse
+        m <- x$getInverse()
+        
+        ## check if inverse null
         if(!is.null(m)) {
+                ## if not null, inverse has been set so return cached matrix
                 message("getting cached data")
                 return(m)
         }
+        
+        ## get original matrix
         data <- x$get()
+        
+        ## compute inverse matrix
         m <- solve(data, ...)
-        x$setinverse(m)
+        
+        ## set inverse matrix 
+        x$setInverse(m)
+        
+        ## return inverse matrix
         m
-                
-        # get inverse
-        # if it isn't null, get the cached data and return
-        # set inverse and return
-        ## Return a matrix that is the inverse of 'x'
 }
